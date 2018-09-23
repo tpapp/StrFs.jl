@@ -44,6 +44,7 @@ end
     @test p2 isa Vector{StrF{2}}
 end
 
+"Convert to StrF, padding size with `Δs`."
 function StrFmultilen(str, Δs)
     S = sizeof(str)
     Any[StrF{S + Δ}(str) for Δ in Δs]
@@ -64,4 +65,13 @@ end
         @test all(fstr .< permutedims(fstra))
         @test all(fstra .< permutedims(fstrλ))
     end
+end
+
+@testset "shortening conversions" begin
+    str = StrF{6}("foo")
+    str3 = StrF{3}(str)
+    str4 = StrF{4}(str)
+    str5 = StrF{5}(str)
+    @test str == str3 == str4 == str5
+    @test_throws InexactError StrF{2}(str)
 end
