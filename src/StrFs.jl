@@ -6,7 +6,7 @@ using StaticArrays: SVector
 using Parameters
 
 import Base: sizeof, read, write, isless, cmp, ==, typemin, repeat, promote_rule, show,
-    codeunit, hash
+    codeunit, hash, length
 
 """
     StrF{S}(::String)
@@ -117,6 +117,8 @@ isless(a::StrF, b::StrF) = cmp(a, b) < 0
 (==)(a::StrF, b::StrF) = cmp(a, b) == 0
 
 typemin(::StrF{S}) where S = StrF(zeros(SVector{S}))
+
+length(str::StrF) = length(String(str)) # TODO improve
 
 function repeat(str::StrF{S}, ::Val{n}) where {S, n}
     @unpack bytes = str

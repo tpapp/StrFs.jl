@@ -18,6 +18,7 @@ end
             S = len + rand(0:2)
             strf = StrF{S}(str)
             @test sizeof(strf) == len
+            @test length(strf) == length(str)
             str2 = String(strf)
             @test str2 == str
 
