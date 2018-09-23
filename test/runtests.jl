@@ -50,7 +50,7 @@ function StrFmultilen(str, Δs)
     Any[StrF{S + Δ}(str) for Δ in Δs]
 end
 
-@testset "concatenation and comparisons" begin
+@testset "concatenation, comparisons, and hashing" begin
     for _ in 1:1000
         str = randstr("abcηβπ", rand(2:8))
         stra = str * "a"
@@ -64,6 +64,7 @@ end
         @test all(str .< fstra)
         @test all(fstr .< permutedims(fstra))
         @test all(fstra .< permutedims(fstrλ))
+        @test all(hash(str) .== hash.(fstr))
     end
 end
 

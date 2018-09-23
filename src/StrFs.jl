@@ -5,7 +5,8 @@ export StrF, @strf_str
 using StaticArrays: SVector
 using Parameters
 
-import Base: sizeof, read, write, isless, cmp, ==, typemin, repeat, promote_rule, show, codeunit
+import Base: sizeof, read, write, isless, cmp, ==, typemin, repeat, promote_rule, show,
+    codeunit, hash
 
 """
     StrF{S}(::String)
@@ -35,6 +36,14 @@ macro strf_str(str)
 end
 
 show(io::IO, str::StrF) = show(io, String(str))
+
+# this implementation is a modified copy from base/hashing2.jl
+function hash(str::StrF, h::UInt)
+    h += Base.memhash_seed
+    # note: use pointer(s) here (see #6058).
+    ccall(Base.memhash, UInt, (Ptr{UInt8}, Csize_t, UInt32),
+          Base.cconvert(Ptr{UInt8}, str.bytes), sizeof(str), h % UInt32) + h
+end
 
 promote_rule(::Type{String}, ::Type{StrF{S}}) where S = String
 
