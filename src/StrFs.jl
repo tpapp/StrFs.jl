@@ -51,6 +51,7 @@ function sizeof(str::StrF{S}) where S
     end
 end
 
+## TODO change when https://github.com/JuliaArrays/StaticArrays.jl/issues/505 is fixed
 read(io::IO, ::Type{StrF{S}}) where S = StrF{S}(read!(io, SVector{S,UInt8}))
 
 write(io::IO, str::StrF) = write(io, str.bytes)
