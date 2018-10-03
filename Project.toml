@@ -1,5 +1,5 @@
 name = "StrFs"
-uuid = "3f2c1c7a-be37-11e8-12fe-1343c1987e6e"
+uuid = "299745a8-1dd2-5813-967e-1153b019bdef"
 authors = ["Tamas K. Papp <tkpapp@gmail.com>"]
 version = "0.1.0"
 
