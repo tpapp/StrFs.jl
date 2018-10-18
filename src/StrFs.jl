@@ -28,7 +28,7 @@ as a storage type. For complex manipulations, it is recommended that you convert
 `String`.
 """
 struct StrF{S} <: AbstractString
-    bytes::SVector{S, UInt8}
+    bytes::SVector{S,UInt8}
 end
 
 macro strf_str(str)
@@ -68,6 +68,7 @@ write(io::IO, str::StrF) = write(io, str.bytes)
 String(str::StrF{S}) where S = String(str.bytes[1:sizeof(str)])
 
 function StrF{S}(str::AbstractString) where S
+    @assert codeunit(str) ≡ UInt8
     len = sizeof(str)
     len ≤ S || throw(InexactError(:StrF, StrF{S}, str))
     bytes = Vector{UInt8}(undef, S)
@@ -75,7 +76,7 @@ function StrF{S}(str::AbstractString) where S
     if len < S
         bytes[len + 1] = UInt8(0)
     end
-    StrF{S}(SVector{S}(bytes))
+    StrF{S}(SVector{S,UInt8}(bytes))
 end
 
 function StrF{A}(str::StrF{B}) where {A,B}
@@ -93,7 +94,7 @@ end
 function StrF(str::AbstractString)
     @assert codeunit(str) ≡ UInt8
     S = sizeof(str)
-    StrF{S}(SVector{S}(codeunits(str)))
+    StrF{S}(SVector{S,UInt8}(codeunits(str)))
 end
 
 function cmp(a::StrF{A}, b::StrF{B}) where {A, B}
