@@ -77,3 +77,10 @@ end
     @test str == str3 == str4 == str5
     @test_throws InexactError StrF{2}(str)
 end
+
+@testset "zero length strings" begin
+    s0 = StrF{0}("")
+    s = StrF("")
+    @test length(s) == length(s0) == 0
+    @test s == s0 == StrF{1}("")
+end
