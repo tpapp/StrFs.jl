@@ -1,7 +1,7 @@
 name = "StrFs"
 uuid = "299745a8-1dd2-5813-967e-1153b019bdef"
 authors = ["Tamas K. Papp <tkpapp@gmail.com>"]
-version = "0.1.1"
+version = "0.1.2"
 
 [deps]
 Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
