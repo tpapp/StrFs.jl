@@ -136,4 +136,18 @@ function repeat(str::StrF{S}, ::Val{n}) where {S, n}
     StrF{S}(SVector{S}(v))
 end
 
+function Base.iterate(str::StrF, state = (String(str), ))
+    # NOTE: iteration implemented by converting to a string, and using it as the first
+    # element of the state. The second element is the state for the iterator of the latter.
+    y = iterate(state...)
+    y ≡ nothing && return y
+    first(y), (first(state), last(y))
+end
+
+Base.IteratorSize(::Type{<:StrF}) = Base.IteratorSize(String)
+
+Base.IteratorEltype(::Type{<:StrF}) = Base.IteratorEltype(String)
+
+Base.eltype(::Type{<:StrF}) = Base.eltype(String)
+
 end # module

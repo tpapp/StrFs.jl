@@ -84,3 +84,17 @@ end
     @test length(s) == length(s0) == 0
     @test s == s0 == StrF{1}("")
 end
+
+@testset "iteration" begin
+    for s in ["abc", "ηβπ", "∇κ≠0 ↔ ∃ζ>0"]
+        @test collect(StrF(s)) == collect(s)
+    end
+    for _ in 1:1000
+        s = randstr("aα∃bc", rand(3:5))
+        @test collect(StrF(s)) == collect(s)
+    end
+    S = StrF{9}
+    @test eltype(S) ≡ eltype(String)
+    @test Base.IteratorSize(S) ≡ Base.IteratorSize(String)
+    @test Base.IteratorEltype(S) ≡ Base.IteratorEltype(S)
+end
