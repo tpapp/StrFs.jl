@@ -93,4 +93,8 @@ end
         s = randstr("aα∃bc", rand(3:5))
         @test collect(StrF(s)) == collect(s)
     end
+    S = StrF{9}
+    @test eltype(S) ≡ eltype(String)
+    @test Base.IteratorSize(S) ≡ Base.IteratorSize(String)
+    @test Base.IteratorEltype(S) ≡ Base.IteratorEltype(S)
 end
