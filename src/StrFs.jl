@@ -6,7 +6,8 @@ using StaticArrays: SVector
 using Parameters
 
 import Base: sizeof, read, write, isless, cmp, ==, typemin, repeat, promote_rule, show,
-    codeunit, hash, length
+    codeunit, hash, length, ncodeunits, codeunit, codeunits, lastindex, firstindex,
+    isvalid
 
 """
     StrF{S}(::String)
@@ -119,6 +120,18 @@ isless(a::StrF, b::StrF) = cmp(a, b) < 0
 typemin(::StrF{S}) where S = StrF(zeros(SVector{S}))
 
 length(str::StrF) = length(String(str)) # TODO improve
+
+ncodeunits(s::StrF) = ncodeunits(String(s)) # TODO improve
+
+codeunit(s::StrF, i::Integer) = codeunit(String(s), i) # TODO improve
+
+codeunits(s::StrF) = codeunits(String(s)) # TODO improve
+
+lastindex(s::StrF) = lastindex(String(s)) # TODO improve
+
+firstindex(s::StrF) = firstindex(String(s)) # TODO improve
+
+isvalid(s::StrF, i::Integer) = isvalid(String(s), i) # TODO improve
 
 function repeat(str::StrF{S}, ::Val{n}) where {S, n}
     @unpack bytes = str
