@@ -3,7 +3,7 @@ module StrFs
 export StrF, @strf_str
 
 using StaticArrays: SVector
-using Parameters
+using UnPack: @unpack
 
 import Base: sizeof, read, write, isless, cmp, ==, typemin, repeat, promote_rule, show,
     codeunit, hash, length
