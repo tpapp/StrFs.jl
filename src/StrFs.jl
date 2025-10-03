@@ -38,11 +38,13 @@ end
 show(io::IO, str::StrF) = show(io, String(str))
 
 # this implementation is a modified copy from base/hashing2.jl
-function hash(str::StrF, h::UInt)
-    h += Base.memhash_seed
-    # note: use pointer(s) here (see #6058).
-    ccall(Base.memhash, UInt, (Ptr{UInt8}, Csize_t, UInt32),
-          Base.cconvert(Ptr{UInt8}, str.bytes), sizeof(str), h % UInt32) + h
+if isdefined(Base, :memhash)
+    function hash(str::StrF, h::UInt)
+        h += Base.memhash_seed
+        # note: use pointer(s) here (see #6058).
+        ccall(Base.memhash, UInt, (Ptr{UInt8}, Csize_t, UInt32),
+              Base.cconvert(Ptr{UInt8}, str.bytes), sizeof(str), h % UInt32) + h
+    end
 end
 
 promote_rule(::Type{String}, ::Type{StrF{S}}) where S = String
@@ -50,6 +52,8 @@ promote_rule(::Type{String}, ::Type{StrF{S}}) where S = String
 promote_rule(::Type{StrF{A}}, ::Type{StrF{B}}) where {A,B} = StrF{max(A,B)}
 
 codeunit(::StrF{S}) where S = UInt8
+
+codeunit(str::StrF{S}, i::Int) where S = str.bytes[i]
 
 function sizeof(str::StrF{S}) where S
     nul = findfirst(isequal(0x00), str.bytes)

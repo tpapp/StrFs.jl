@@ -98,3 +98,12 @@ end
     @test Base.IteratorSize(S) ≡ Base.IteratorSize(String)
     @test Base.IteratorEltype(S) ≡ Base.IteratorEltype(S)
 end
+
+@testset "codeunit" begin
+    s = "hello"
+    strf = StrF{10}(s)
+    @test codeunit(strf) == UInt8
+    for i in 1:sizeof(s)
+        @test codeunit(strf, i) == codeunit(s, i)
+    end
+end
