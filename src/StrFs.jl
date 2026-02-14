@@ -3,7 +3,6 @@ module StrFs
 export StrF, @strf_str
 
 using StaticArrays: SVector
-using UnPack: @unpack
 
 import Base: sizeof, read, write, isless, cmp, ==, typemin, repeat, promote_rule, show,
     codeunit, hash, length
@@ -68,7 +67,7 @@ read(io::IO, ::Type{StrF{S}}) where S = StrF{S}(read(io, SVector{S,UInt8}))
 
 write(io::IO, str::StrF) = write(io, str.bytes)
 
-String(str::StrF{S}) where S = String(str.bytes[1:sizeof(str)])
+Base.String(str::StrF{S}) where S = String(str.bytes[1:sizeof(str)])
 
 function StrF{S}(str::AbstractString) where S
     @assert codeunit(str) ≡ UInt8
@@ -125,7 +124,7 @@ typemin(::StrF{S}) where S = StrF(zeros(SVector{S}))
 length(str::StrF) = length(String(str)) # TODO improve
 
 function repeat(str::StrF{S}, ::Val{n}) where {S, n}
-    @unpack bytes = str
+    (; bytes) = str
     s = sizeof(str)
     vS = n * s
     v = Vector{UInt8}(undef, vS)
